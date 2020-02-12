@@ -34,7 +34,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.secret, function (sprite, otherS
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Exit, function (sprite, otherSprite) {
-    game.over(true)
+    game.over(true, effects.confetti)
 })
 let walkCounter = 0
 let exitStairs: Sprite = null
@@ -104,11 +104,11 @@ let leftSprites = [img`
 let rightSprites = [sprites.builtin.villager1WalkRight3, sprites.builtin.villager1WalkRight2, sprites.builtin.villager1WalkRight1]
 let upSprites = [sprites.builtin.villager1WalkBack1, sprites.builtin.villager1WalkBack2, sprites.builtin.villager1WalkBack3]
 let downSprites = [sprites.builtin.villager1WalkFront1, sprites.builtin.villager1WalkFront2, sprites.builtin.villager1WalkFront3]
-scene.cameraFollowSprite(mySprite)
 mySprite.setPosition(232, 24)
+scene.cameraFollowSprite(mySprite)
 controller.moveSprite(mySprite, 100, 100)
 game.showLongText("Explore ruined Tamara to find your destiny. ", DialogLayout.Bottom)
-forever(function () {
+game.onUpdateInterval(100, function () {
     if (mySprite.vx < 0) {
         mySprite.setImage(leftSprites[walkCounter])
     }
