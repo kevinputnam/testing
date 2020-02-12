@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const secret = SpriteKind.create()
     export const Wall = SpriteKind.create()
+    export const Exit = SpriteKind.create()
 }
 namespace myTiles {
     //% blockIdentity=images._tile
@@ -23,24 +24,23 @@ namespace myTiles {
 . . . . . . . . . . . . . . . . 
 `
 }
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorClosedSouth, function (sprite, location) {
-    if (stoneTriggered == 1) {
-        game.over(true)
-    }
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.secret, function (sprite, otherSprite) {
     if (stoneTriggered == 0) {
         game.showLongText("You hear a grinding noise of stone on stone.", DialogLayout.Bottom)
-        secretWall.destroy()
-        tiles.setWallAt(tiles.getTileLocation(10, 15), false)
+        tiles.setWallAt(tiles.getTileLocation(9, 14), false)
         stoneTriggered = 1
+        exitStairs = sprites.create(sprites.dungeon.stairLarge, SpriteKind.Exit)
+        exitStairs.setPosition(152, 232)
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Exit, function (sprite, otherSprite) {
+    game.over(true)
+})
 let walkCounter = 0
+let exitStairs: Sprite = null
 let stoneTriggered = 0
-let secretWall: Sprite = null
 tiles.setTilemap(tiles.createTilemap(
-            hex`1000100001020202010303020302030103070809020302030203020201020302020a0b0c020203030202010202030302010d0e0f0301030303020203030203020302030319161916170303030302020302030202222223241803020103031b1616161702242324221f19162e2e16202222241f1622222225222222222222222322222222040422222223222425222422222523220405040424222222222204040422222204060404040404040404042704042524060604040504042929042905280404220405040404292929292929292929040429292929292929052929292929292929292929292929292929292929292929292a2a2a2a2a2a2a2a2a2a2d2a2a2a2a2a`,
+            hex`1000100001020202010303020302030103070809020302030203020201020302020a0b0c020203030202010202030302010d0e0f0301030303020203030203020302030319161916170303030302020302030202222223241803020103031b1616161702242324221f19162e2e16202222241f1622222225222222222222222322222222040422222223222425222422222523220405040424222222222204040422222204060404040404040404042704042524060604040504042929042905280404220405040404292929292929292929040429292929292929052929292929292929292929292929292929272929292929292a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a`,
             img`
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
@@ -59,10 +59,9 @@ tiles.setTilemap(tiles.createTilemap(
 . . . . . . . . . . . . . . . . 
 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
 `,
-            [myTiles.tile0,sprites.castle.tileGrass2,sprites.castle.tileGrass1,sprites.castle.tileGrass3,sprites.castle.tileDarkGrass1,sprites.castle.tileDarkGrass2,sprites.castle.tileDarkGrass3,sprites.castle.tilePath1,sprites.castle.tilePath2,sprites.castle.tilePath3,sprites.castle.tilePath4,sprites.castle.tilePath5,sprites.castle.tilePath6,sprites.castle.tilePath7,sprites.castle.tilePath8,sprites.castle.tilePath9,sprites.builtin.forestTiles1,sprites.builtin.forestTiles2,sprites.builtin.forestTiles16,sprites.builtin.forestTiles20,sprites.builtin.forestTiles21,sprites.castle.saplingPine,sprites.dungeon.greenOuterNorth0,sprites.dungeon.greenOuterNorthEast,sprites.dungeon.greenOuterEast0,sprites.dungeon.greenOuterNorth1,sprites.dungeon.greenOuterSouthEast,sprites.dungeon.greenOuterNorthWest,sprites.dungeon.greenOuterSouthWest,sprites.dungeon.greenOuterWest0,sprites.dungeon.purpleInnerNorthEast,sprites.dungeon.greenInnerSouthWest,sprites.dungeon.greenInnerSouthEast,sprites.dungeon.greenInnerNorthWest,sprites.dungeon.floorDark0,sprites.dungeon.floorDark1,sprites.dungeon.floorDark4,sprites.dungeon.floorDark3,sprites.dungeon.floorLight5,sprites.dungeon.floorDarkDiamond,sprites.dungeon.floorDark5,sprites.dungeon.floorDark2,sprites.dungeon.greenOuterSouth0,sprites.dungeon.stairSouth,sprites.builtin.forestTiles24,sprites.dungeon.doorClosedSouth,sprites.dungeon.stairNorth],
+            [myTiles.tile0,sprites.castle.tileGrass2,sprites.castle.tileGrass1,sprites.castle.tileGrass3,sprites.castle.tileDarkGrass1,sprites.castle.tileDarkGrass2,sprites.castle.tileDarkGrass3,sprites.castle.tilePath1,sprites.castle.tilePath2,sprites.castle.tilePath3,sprites.castle.tilePath4,sprites.castle.tilePath5,sprites.castle.tilePath6,sprites.castle.tilePath7,sprites.castle.tilePath8,sprites.castle.tilePath9,sprites.builtin.forestTiles1,sprites.builtin.forestTiles2,sprites.builtin.forestTiles16,sprites.builtin.forestTiles20,sprites.builtin.forestTiles21,sprites.castle.saplingPine,sprites.dungeon.greenOuterNorth0,sprites.dungeon.greenOuterNorthEast,sprites.dungeon.greenOuterEast0,sprites.dungeon.greenOuterNorth1,sprites.dungeon.greenOuterSouthEast,sprites.dungeon.greenOuterNorthWest,sprites.dungeon.greenOuterSouthWest,sprites.dungeon.greenOuterWest0,sprites.dungeon.purpleInnerNorthEast,sprites.dungeon.greenInnerSouthWest,sprites.dungeon.greenInnerSouthEast,sprites.dungeon.greenInnerNorthWest,sprites.dungeon.floorDark0,sprites.dungeon.floorDark1,sprites.dungeon.floorDark4,sprites.dungeon.floorDark3,sprites.dungeon.floorLight5,sprites.dungeon.floorDarkDiamond,sprites.dungeon.floorDark5,sprites.dungeon.floorDark2,sprites.dungeon.greenOuterSouth0,sprites.dungeon.stairSouth,sprites.builtin.forestTiles24,sprites.dungeon.doorClosedSouth,sprites.dungeon.stairNorth,sprites.dungeon.stairLarge],
             TileScale.Sixteen
         ))
-secretWall = sprites.create(sprites.dungeon.greenOuterSouth1, SpriteKind.Wall)
 let triggerStone = sprites.create(sprites.dungeon.floorDark3, SpriteKind.secret)
 let mySprite = sprites.create(img`
 . f f f . f f f f . f f f . 
@@ -83,7 +82,6 @@ f f f c 3 c c c c 3 c f f f
 . . . . f f . . f f . . . . 
 `, SpriteKind.Player)
 stoneTriggered = 0
-secretWall.setPosition(164, 248)
 triggerStone.setPosition(8, 200)
 let leftSprites = [img`
 . . . . f f f f f . f f f . 
