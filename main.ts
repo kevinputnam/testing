@@ -28,6 +28,13 @@ namespace myTiles {
 function loadLevelThree () {
     game.over(true, effects.confetti)
 }
+function loadNextLevel () {
+    if (currentLevel == 1) {
+        loadLevelTwo()
+    } else if (currentLevel == 2) {
+        loadLevelThree()
+    }
+}
 function loadLevelTwo () {
     tiles.setTilemap(tiles.createTilemap(
             hex`1000100038373737374737373737373942545454313f293f293f293f293f283a5254545431273f293f293f293f273f3a42545454303f293f2926293f293f29344137413931293f293f293f283f2926283d22223a313f29262953293f293f293f3d25233a31273f293f273f293f293f32363b363c313f293f293f293f2926293a4254545448293f283f293f293f293f3a54545454313f293f293f293f293f293a465454543536361e3f28323b493b363c42545454424642402e2e3a424246424242545454384141333e3e34374139515151545254314b4c4b4b4b4c4b4d3a515152545454484c4b3e4b4d4b3e4c4e525152525454353b493b3b3b3b493b3c515252545454`,
@@ -37,7 +44,7 @@ function loadLevelTwo () {
 2 . . . . . . . . . . 2 . . . . 
 2 . . . . . . . . . . 2 2 2 2 2 
 2 . . . . . . . . . . . . . . 2 
-2 . . . . . . . . . . . . . . 2 
+2 . . . . 2 . . . . . . . . . 2 
 2 . . . . . . . . . . 2 2 2 2 2 
 2 . . . . . . . . . . 2 . . . . 
 2 . . . . . . . . . . 2 . . . . 
@@ -55,11 +62,23 @@ function loadLevelTwo () {
     oldGuy = sprites.create(sprites.castle.heroWalkFront3, SpriteKind.npc)
     oldGuy.setPosition(32, 216)
     stoneTriggered = 0
-    mySprite.setPosition(16, 48)
-    triggerStone = sprites.create(sprites.dungeon.floorDark3, SpriteKind.secret)
-    triggerStone.setPosition(8, 200)
+    mySprite.setPosition(24, 48)
+    triggerStone = sprites.create(sprites.dungeon.purpleSwitchUp, SpriteKind.secret)
+    triggerStone.setPosition(216, 56)
     currentLevel = 2
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.secret, function (sprite, otherSprite) {
+    if (stoneTriggered == 0) {
+        game.showLongText("You hear a grinding noise of stone on stone.", DialogLayout.Bottom)
+        tiles.setWallAt(tiles.getTileLocation(9, 14), false)
+        stoneTriggered = 1
+        exitStairs = sprites.create(sprites.dungeon.stairLarge, SpriteKind.Exit)
+        exitStairs.setPosition(152, 232)
+    }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Exit, function (sprite, otherSprite) {
+    loadNextLevel()
+})
 function loadLevelOne () {
     tiles.setTilemap(tiles.createTilemap(
             hex`1000100001020202010303020302030103070809020302030203020201020302020a0b0c020203030202010202030302010d0e0f0301030303020203030203020302030319161916170303030302020302030202222223241803020103031b1616161702242324221f19162e2e16202222241f1622222225222222222222222322222222040422222223222425222422222523220405040424222222222204040422222204060404040404040404042704042524060604040504042929042905280404220405040404292929292929292929040429292929292929052929292929292929292929292929292929272929292929292a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a`,
@@ -132,31 +151,12 @@ f f f c 3 c c c c 3 c f f f
     game.showLongText("Explore ruined Tamara to find your destiny. ", DialogLayout.Bottom)
     currentLevel = 1
 }
-function loadNextLevel () {
-    if (currentLevel == 1) {
-        loadLevelTwo()
-    } else if (currentLevel == 2) {
-        loadLevelThree()
-    }
-}
-sprites.onOverlap(SpriteKind.Player, SpriteKind.secret, function (sprite, otherSprite) {
-    if (stoneTriggered == 0) {
-        game.showLongText("You hear a grinding noise of stone on stone.", DialogLayout.Bottom)
-        tiles.setWallAt(tiles.getTileLocation(9, 14), false)
-        stoneTriggered = 1
-        exitStairs = sprites.create(sprites.dungeon.stairLarge, SpriteKind.Exit)
-        exitStairs.setPosition(152, 232)
-    }
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Exit, function (sprite, otherSprite) {
-    loadNextLevel()
-})
 let walkCounter = 0
-let exitStairs: Sprite = null
 let downSprites: Image[] = []
 let upSprites: Image[] = []
 let rightSprites: Image[] = []
 let leftSprites: Image[] = []
+let exitStairs: Sprite = null
 let triggerStone: Sprite = null
 let mySprite: Sprite = null
 let stoneTriggered = 0
